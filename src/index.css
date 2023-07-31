@@ -1,0 +1,21 @@
+.center{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.login-text{
+    font-size: large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  
+}
+.login-form-button {
+  width: 100%;
+}
+.register-button{
+    
+}
