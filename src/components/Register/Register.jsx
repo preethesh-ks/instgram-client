@@ -23,7 +23,7 @@ console.log(full_name,email,password);
  const Submit = async () => {
    const userdata = { email,full_name, password};
    console.log(userdata);
-   const url = "http://localhost:5000/register";
+   const url = "http://localhost:8080/register";
 
    try {
      const response = await axios.post(url, {
@@ -38,24 +38,23 @@ console.log(full_name,email,password);
     notification.success({
       message: `Register Successful`,
       description: "👋 Welcome !",
-    });
+    }); 
     window.location.href = "/home";
    } catch (error) {
-     console.log(error.response);
-     notification.error({
-       message: `${
-         error?.response?.data?.message || "Something Went Wrong, Try Again!"
-       }`,
-       description: "Make sure you have entered right email and password and name.",
-     });
      const emptyField = error.response.status;
-     if (emptyField === 401) {
-       console.log("NOT WORKING");
-    //    setShowInvalidCredentialsDialog(true);
-     }
+     //console.log(error.response);
+     
+      switch (emptyField) {
+      case 401:
+              message.error("Invalid Credentials");
+              break;
+            default:
+              notification.error("Something Went Wrong, Try Again!");
+              break;
+       
    }
  };
-
+ }
 
 
   return (
@@ -115,13 +114,20 @@ console.log(full_name,email,password);
 
         {/* Submit Button */}
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" onClick={Submit}>
+          <Button block type="primary" htmlType="submit" onClick={Submit}>
             Register
           </Button>
+          <br/> or <br/>
+          <a href="/login">
+            <Button block size="small">
+              Login
+            </Button>
+          </a>
         </Form.Item>
       </Form>
     </div>
   );
 }
 
-export default Register
+
+export default Register;
