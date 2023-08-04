@@ -14,7 +14,7 @@ import { Navigate } from "react-router-dom";
 import API_ENDPOINT from "../../config/axios";
 import "../../index.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-
+import { base_url } from "../../utils/constant";
 const { Title } = Typography;
 const Login = () => {
   // const [messageApi, contextHolder] = message.useMessage();
@@ -37,7 +37,7 @@ const Login = () => {
     setIsLoading(true);
     const userdata = { email, password };
     console.log(userdata);
-    const url = "http://localhost:8080/login";
+    const url = `${base_url}/login`;
 
     try {
       const response = await axios.post(url, {

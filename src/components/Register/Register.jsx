@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import { Form, Input, Button, Typography, notification ,message} from "antd";
-
+import { base_url } from "../../utils/constant";
 import axios from 'axios';
 const { Title } = Typography;
 
@@ -23,7 +23,7 @@ console.log(full_name,email,password);
  const Submit = async () => {
    const userdata = { email,full_name, password};
    console.log(userdata);
-   const url = "http://localhost:8080/register";
+   const url = `${base_url}/register`;
 
    try {
      const response = await axios.post(url, {
