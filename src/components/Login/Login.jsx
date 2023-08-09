@@ -78,81 +78,91 @@ const Login = () => {
 
   return (
     <div>
-      <div className="center">
-        <Spin className="center" spinning={isLoading} tip="Loading..." />
+      <div className="login-page">
+        <div className="center">
+          <Form
+            name="basic"
+            
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ remember: true }}
+            //   onFinish={onFinish}
+            //   onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Title level={3} center className="pad-2">
+              Login || InstGram
+            </Title>
 
-        <Form
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          initialValues={{ remember: true }}
-          //   onFinish={onFinish}
-          //   onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Title level={3} center>
-            Login
-          </Title>
-          <Form.Item
-            type="email"
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Please input your Email!" },
-              { type: "email", message: "Please enter a valid email address!" },
-            ]}
-            size="large"
-          >
-            <Input
+            <Form.Item
+              type="email"
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: "Please input your Email!" },
+                {
+                  type: "email",
+                  message: "Please enter a valid email address!",
+                },
+              ]}
               size="large"
-              prefix={<UserOutlined />}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-            size="large"
-          >
-            <Input.Password
-              size="large"
-              prefix={<LockOutlined />}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 8, span: 16 }}
-          >
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
-              onClick={Submit}
-              className=""
             >
-              Login
-              {/* {isLoading ? <Spin /> : "Login"} */}
-            </Button>
-            <br /> or <br />
-            <a href="/register">
-              <Button block size="small">
-                Register
+              <Input
+                autoComplete="true"
+                size="large"
+                prefix={<UserOutlined />}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                allowClear
+              />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+              size="large"
+            >
+              <Input.Password
+                size="large"
+                prefix={<LockOutlined />}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                allowClear
+              />
+            </Form.Item>
+            <Form.Item
+              name="remember"
+              valuePropName="checked"
+              wrapperCol={{ offset: 8, span: 16 }}
+            >
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+            <Spin className="pad" spinning={isLoading} tip="Loading..." />
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button
+                size="large"
+                block
+                type="primary"
+                htmlType="submit"
+                onClick={Submit}
+                className=""
+              >
+                Login
+                {/* {isLoading ? <Spin /> : "Login"} */}
               </Button>
-            </a>
-          </Form.Item>
-        </Form>
+              <br /> or <br />
+              <a href="/register">
+                <Button block size="medium">
+                  Register
+                </Button>
+              </a>
+            </Form.Item>
+          </Form>
 
-        <div className="register-button"></div>
+          <div className="register-button"></div>
+        </div>
       </div>
     </div>
   );

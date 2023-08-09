@@ -9,7 +9,8 @@ const Register = () => {
     const [email, setEmail] = useState("");
      const [password, setPassword] = useState("");
      const [responseData, setResponseData] = useState(null);
-
+    const [profilePic,setProfilePic] = useState();
+    const [username,setUsername] = useState();
 console.log(full_name,email,password);
      const validateConfirmPassword = ({ getFieldValue }) => ({
        validator(_, value) {
@@ -21,7 +22,7 @@ console.log(full_name,email,password);
      });
 
  const Submit = async () => {
-   const userdata = { email,full_name, password};
+   const userdata = { email,full_name, password ,profilePic,username};
    console.log(userdata);
    const url = `${base_url}/register`;
 
@@ -30,6 +31,8 @@ console.log(full_name,email,password);
        email: userdata.email,
        full_name:userdata.full_name,
        password: userdata.password,
+       profilepic: userdata.profilePic,
+       username: userdata.username
      });
      console.log("response ", response.data);
      setResponseData(response.data);
@@ -58,10 +61,19 @@ console.log(full_name,email,password);
 
 
   return (
-    <div style={{ width: 400, margin: "0 auto", padding: 20 }}>
-      <Title level={3}>Register</Title>
-      <Form name="register" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+    <div className="center ">
+      <Form
+        name="register"
+        labelAlign="left"
+        labelWrap
+        labelCol={{ span: 6 }}
+        wrapperCol={{ flex: 6 }}
+        // className="box-shadow"
+      >
         {/* Full Name Field */}
+        <Title className="pad-3" level={3}>
+          Register || Instgram
+        </Title>
         <Form.Item
           label="Full Name"
           name="fullName"
@@ -108,16 +120,46 @@ console.log(full_name,email,password);
             { required: true, message: "Please confirm your password!" },
             validateConfirmPassword,
           ]}
+          className="text-align"
         >
           <Input.Password />
         </Form.Item>
 
+        <Form.Item
+          label="Profile Picture"
+          name="profilePic"
+          rules={[
+            { required: true, message: "Please enter your email!" },
+            { type: "text", message: "Please enter a valid email address!" },
+          ]}
+        >
+          <Input
+            value={profilePic}
+            onChange={(e) => setProfilePic(e.target.value)}
+          />
+        </Form.Item>
+        <Form.Item
+          label="username"
+          name="username"
+          rules={[
+            { required: true, message: "Please enter your email!" },
+            { type: "text", message: "Please enter a valid email address!" },
+          ]}
+        >
+          <Input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </Form.Item>
+
         {/* Submit Button */}
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
           <Button block type="primary" htmlType="submit" onClick={Submit}>
             Register
           </Button>
-          <br/> or <br/>
+          {/* <br /> or <br /> */}
+          <br />
+          <br />
           <a href="/login">
             <Button block size="small">
               Login

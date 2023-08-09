@@ -1,19 +1,50 @@
 import React, { useState,useEffect } from 'react'
 import axios from 'axios';
+import jwtDecode from "jwt-decode";
 // const API = process.env.REACT_APP_API_ENDPOINT;
 import { base_url } from '../../utils/constant';
-import { Button, Upload, Form, Input ,Typography} from "antd";
-
+import { Button, Upload, Form, Input, Typography, message } from "antd";
+import ImageUpload from "../Imageupload";
 const { Title } = Typography;
-const url = `${base_url}/upload`;
+// const url = `${base_url}/upload`;
 const Post = () => {
-const [getImage,setGetImage] = useState([])
-    const [file,setFile] = useState();
-    const [caption,setCaption] = useState()
-      const userId = "64c52892ff7a0a651272e97e";
+const [decodedUserId,setDecoded] = useState();
 
-    const [loading, setLoading] = useState(false); 
-     const [path, setPath] = useState([]);
+
+const [getImage, setGetImage] = useState([]);
+const [file, setFile] = useState();
+const [caption, setCaption] = useState();
+
+
+const [loading, setLoading] = useState(false);
+const [path, setPath] = useState([]);
+const [fpath, setFpath] = useState()
+
+
+  useEffect(() =>{
+     const getAccessTokenFromLocalStorage = () => {
+       const accessToken = localStorage.getItem("access_token");
+       //console.log(accessToken);
+
+       if (accessToken) {
+         // Decode the JWT and set the decoded values in state
+         try {
+           const decoded = jwtDecode(accessToken);
+          // console.log(decoded.user_id);
+           setDecoded(decoded.user_id);
+         } catch (error) {
+           // Handle decoding errors
+           console.error("Error decoding JWT:", error);
+         }
+       }
+     };
+
+     getAccessTokenFromLocalStorage();
+  },[])
+
+
+
+
      const handleOnChange = ({ file, fileList, event }) => {
       //  console.log(file.response);
        if(file.response){
@@ -28,23 +59,47 @@ const [getImage,setGetImage] = useState([])
      };
 
      const AddPost = async()=>{
-      const Postdata = await {path,userId,caption};
+      const Postdata =  { fpath, decodedUserId, caption };
       console.log(Postdata);
+      // if(!path || !decodedUserId || !caption){
+      //   console.log("fill");
+      //   message.error("Please fill all fields");
+      // }
+      if (!path) {
+        message.error("Please select an image");
+      } else if (!decodedUserId) {
+        message.error("Please log in");
+        window.location.href = "/login";
+      } else if (!caption) {
+        message.error("Please enter a caption");
+      } else {
+        // All conditions are met, proceed with the action
+        // ...
+      
       // const url = `${base_url}/post`;
-        const url = "http://localhost:8080/post"
+        const url = `${base_url}/post`;
         try {
-            const response = await axios.post(url,{
-              path:Postdata.path,
-              userId:Postdata.userId,
-              caption:Postdata.caption
-            })
+            const response = await axios.post(url, {
+              path: Postdata.fpath.url,
+              userId: Postdata.decodedUserId,
+              caption: Postdata.caption,
+            });
             console.log(response.data);
+            window.location.href = "/home";
+
         }catch(err){
         console.log(err);
+        console.log(err.response.status);
+        if(err.response.status === 500){
+          localStorage.clear();
+          message.error("User not found please try Login again");
+          window.location.href = "/login";
+          
+        }
         }
 
 
-     }
+     }}
     // const handleupload = async (e) => {
 
     //     const formdata = new FormData()
@@ -71,35 +126,29 @@ const [getImage,setGetImage] = useState([])
     //   };
     //   image();
     // }, []);
+    const handleData=  (data)=>{
+      setFpath(data);
+    }
     
 
 
   return (
     <div className="center-post-items">
-      {/* <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-      <button onClick={handleupload}>Upload</button> */}
-
-      {/* //<img src={`http://localhost:8080/images/` + getImage} alt="i" /> */}
-      {/* {getImage.map((item) => (
-        <div key={item._id}>
-          <img
-            src={`${base_url}/Images/` + item.image}
-            alt={item.name}
-          />
-        </div>
-      ))} */}
       <div style={{ width: 400, margin: "0 auto", padding: 20 }}>
         <Title level={3}>Post Image</Title>
 
-        <Upload
+        {/* <Upload
           name="file"
-          action={"http://localhost:8080/api/upload"}
+          action={`${base_url}/upload`}
           listType="picture-circle"
           multiple
           onChange={handleOnChange}
-        >
-          helo
-        </Upload>
+        > 
+        +
+        <br /> 
+          Uploads
+        </Upload> */}
+        <ImageUpload send={handleData} />
         <Form name="register" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
           {/* Full Name Field */}
           <Form.Item
@@ -127,10 +176,10 @@ const [getImage,setGetImage] = useState([])
             <Button block type="primary" htmlType="submit" onClick={AddPost}>
               Post
             </Button>
-            
-          
           </Form.Item>
         </Form>
+
+        
       </div>
     </div>
   );

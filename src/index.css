@@ -1,28 +1,68 @@
-.center{
-    display: flex;
+.center {
+  display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
+  background: #d9edff;
+  /* // margin: 0; */
 }
-.login-text{
-    font-size: large;
+.login-text {
+  font-size: large;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0;
-  
 }
 /* .login-form-button {
   width: 100%;
 } */
-.register-button{
-    
+.register-button {
 }
 
-.center-post-items{
+.center-post-items {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.center-post {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
   
+  /* height: 100vh;
+  margin: 0; */
+}
+.center-pad {
+  padding-left: 50;
+}
+.pad {
+  padding-left: 220px;
+  /* margin-left: 200px; */
+}
+.pad-2 {
+  display: flex;
+  justify-content: center;
+  padding-left: 75px;
+  padding-bottom: 25px;
+  /* width: 100%; */
+}
+.pad-3{
+   padding-left: 75px;
+  padding-bottom: 25px;
+}
+
+.text-align {
+  text-align: start;
+}
+
+.box-shadow {
+ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #d9edff;
 }
