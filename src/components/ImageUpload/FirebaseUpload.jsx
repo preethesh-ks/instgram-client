@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useState } from "react";
- import { storage } from '../utils/firebase.config';
+ import { storage } from '../../utils/firebase.config';
 import * as firebase from "firebase/app";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { UploadOutlined } from "@ant-design/icons";

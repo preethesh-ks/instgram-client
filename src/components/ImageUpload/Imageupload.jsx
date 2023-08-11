@@ -11,7 +11,7 @@ import {
   Typography,
   Upload,
 } from "antd";
-import { storage } from "../utils/firebase.config";
+import { storage } from "../../utils/firebase.config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 //import { getDownloadURL, ref, uploadBytesResumable,child } from "firebase/storage";

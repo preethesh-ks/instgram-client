@@ -105,8 +105,8 @@ console.log(full_name,email,password);
             { required: true, message: "Please enter your password!" },
             { min: 6, message: "Password must be at least 6 characters!" },
           ]}
-        >
-          <Input.Password
+            >
+              <Input.Password
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
