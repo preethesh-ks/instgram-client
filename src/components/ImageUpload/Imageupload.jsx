@@ -2,16 +2,12 @@ import React, { useState } from 'react'
 import { UploadOutlined } from "@ant-design/icons";
 import {
   Button,
-  Checkbox,
   Form,
-  Input,
-  notification,
   message,
-  Spin,
-  Typography,
   Upload,
+  
 } from "antd";
-import { storage } from "../../utils/firebase.config";
+import ImgCrop from "antd-img-crop";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 //import { getDownloadURL, ref, uploadBytesResumable,child } from "firebase/storage";
@@ -90,22 +86,23 @@ const handleFinish = async () => {
     <div>
       <Form onFinish={handleFinish}>
         <div className="uploadContainer">
-          <Upload.Dragger
-            listType="picture-card"
-            fileList={fileList}
-            beforeUpload={beforeUpload}
-            //onPreview={handlePreview}
-            onChange={handleChange}
-            onRemove={onRemove}
-            multiple={true}
-          >
-            <div className="uploadIcon">
-              <UploadOutlined />
-            </div>
-          
-          </Upload.Dragger>
+          <ImgCrop rotationSlider>
+            <Upload.Dragger
+              listType="picture-card"
+              fileList={fileList}
+              beforeUpload={beforeUpload}
+              //onPreview={handlePreview}
+              onChange={handleChange}
+              onRemove={onRemove}
+              multiple={true}
+            >
+              <div className="uploadIcon">
+                <UploadOutlined />
+              </div>
+            </Upload.Dragger>
+          </ImgCrop>
         </div>
-        <Form.Item >
+        <Form.Item>
           <Button shape="round" htmlType="submit">
             {submitting ? "Uploading" : "Upload"}
           </Button>

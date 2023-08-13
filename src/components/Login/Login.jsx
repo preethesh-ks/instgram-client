@@ -36,15 +36,15 @@ const Login = () => {
   const Submit = async () => {
     setIsLoading(true);
     const userdata = { email, password };
-    console.log(userdata);
+   // console.log(userdata);
     const url = `${base_url}/login`;
-
+try{
     try {
       const response = await axios.post(url, {
         email: userdata.email,
         password: userdata.password,
       });
-      console.log("response", response.data);
+     // console.log("response", response.data);
       setResponseData(response.data);
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("refresh_token", response.data.refresh_token);
@@ -57,7 +57,7 @@ const Login = () => {
       });
       window.location.href = "/home";
     } catch (error) {
-      console.log(error.response);
+     // console.log(error.response);
       const emptyField = error.response.status;
       switch (emptyField) {
         case 401:
@@ -74,6 +74,10 @@ const Login = () => {
     } finally {
       setIsLoading(false); // Stop the loading spinner when the request is loaded
     }
+    } catch (error) {
+     // console.log(error);
+      message.error("Something went wrong Try Again");}
+  
   };
 
   return (

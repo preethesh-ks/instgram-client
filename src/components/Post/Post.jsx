@@ -6,6 +6,7 @@ import { base_url } from "../../utils/constant";
 import { Button, Upload, Form, Input, Typography, message } from "antd";
 import ImageUpload from "../ImageUpload/Imageupload";
 const { Title } = Typography;
+const { TextArea } = Input;
 // const url = `${base_url}/upload`;
 const Post = () => {
   const [decodedUserId, setDecoded] = useState();
@@ -57,7 +58,7 @@ const Post = () => {
     //   console.log("fill");
     //   message.error("Please fill all fields");
     // }
-    if (!path) {
+    if (!fpath) {
       message.error("Please select an image");
     } else if (!decodedUserId) {
       message.error("Please log in");
@@ -75,6 +76,7 @@ const Post = () => {
           path: Postdata.fpath.url,
           userId: Postdata.decodedUserId,
           caption: Postdata.caption,
+          token : localStorage.getItem("access_token"),
         });
         console.log(response.data);
         window.location.href = "/home";
@@ -84,6 +86,14 @@ const Post = () => {
         if (err.response.status === 500) {
           localStorage.clear();
           message.error("User not found please try Login again");
+          window.location.href = "/login";
+        } else if(err.response.status === 403){
+          localStorage.clear();
+          message.error("Data Not found please try Login again");
+          window.location.href = "/login";
+        } else if(err.response.status ===401){
+          localStorage.clear();
+          message.error("Token is invalid Please try Login again");
           window.location.href = "/login";
         }
       }
@@ -111,10 +121,20 @@ const Post = () => {
               },
             ]}
           >
-            <Input
+            {/* <Input
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-            />
+              bordered={false}
+              showCount
+              maxLength={200}
+            /> */}
+            <TextArea
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              bordered={true}
+              showCount
+              maxLength={200}
+            ></TextArea>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button block type="primary" htmlType="submit" onClick={AddPost}>

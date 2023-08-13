@@ -25,7 +25,7 @@ console.log(full_name,email,password);
    const userdata = { email,full_name, password ,profilePic,username};
    console.log(userdata);
    const url = `${base_url}/register`;
-
+try{
    try {
      const response = await axios.post(url, {
        email: userdata.email,
@@ -52,11 +52,15 @@ console.log(full_name,email,password);
               message.error("Invalid Credentials");
               break;
             default:
-              notification.error("Something Went Wrong, Try Again!");
+              message.error("Something Went Wrong, Try Again!");
               break;
        
    }
  };
+}catch(e) {
+  console.log("Error",e);
+  message.error("Something Went Wrong, Try Again!");
+}
  }
 
 

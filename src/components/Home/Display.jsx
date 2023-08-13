@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, Avatar, Row, Col, Button,Space } from "antd";
+import { Card, Avatar, Row, Col, Button, Space, message, Image ,Spin} from "antd";
 import { Link } from "react-router-dom";
 import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
   HeartFilled,
   HeartOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
-import { base_url } from "../../utils/constant";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 const { Meta } = Card;
@@ -67,9 +63,9 @@ const Display = () => {
   const [data, setData] = useState([]);
   const [userLikes, setUserLikes] = useState({});
   const [decodedUserId, setDecoded] = useState();
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   console.log(decodedUserId);
-
+//console.log(userLikes);
   useEffect(() => {
     const getAccessTokenFromLocalStorage = () => {
       const accessToken = localStorage.getItem("access_token");
@@ -103,15 +99,17 @@ const Display = () => {
       jsonData.forEach((post) => {
         likedStatus[post._id] = post.likes.some(
           (like) => like.userId === decodedUserId
-        ); // Replace 'user-id' with actual user ID
+        ); 
       });
       console.log(jsonData);
-      setUserLikes(likedStatus);
+      
       console.log(userLikes);
       setData(jsonData);
-      setLoading(false);
+      setUserLikes(likedStatus);
+      
     } catch (e) {
       console.log(e);
+      message.error("Something Went Wrong Try Again!");
     }
   };
   const updateLike = async (postId) => {
@@ -119,7 +117,7 @@ const Display = () => {
     const userId = decodedUserId;
     console.log(userId);
     try{
-      const likeStatus = await axios.post(`http://localhost:8080/api/${postId}`,{userId:userId});
+      const likeStatus = await axios.post(`http://localhost:8080/api/like`,{userId:userId,postId:postId});
       console.log(likeStatus);
       fetchAPi();
       
@@ -137,14 +135,20 @@ const Display = () => {
   console.log(data);
 
   useEffect(() => {
-    fetchAPi();
-    
-  }, []);
+    const fetchData = async () => {
+      await fetchAPi(); // Fetch data and update userLikes
+      setLoading(false); // Set loading to false after data is fetched and userLikes is updated
+    };
+    fetchData();
+  }, [decodedUserId]);
 
-const handlelike = async () => {};
+
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
+      {loading ? ( // Display Spin component while loading is true
+        <Spin size="large" />
+      ) : (
       <Row gutter={16} justify="center">
         {data.map((item, index) => (
           <Col span={15} key={index} className="center-post">
@@ -164,41 +168,63 @@ const handlelike = async () => {};
               loading={loading}
               extra="sss"
               cover={
-                <img
-                  alt="avatar"
-                  src={item.path}
-                  style={{
-                    borderRadius: "3px",
-                    display: "block",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    width: "55%",
-                  }}
-                  bodyStyle={{ color: "black" }}
-                />
+                <Link to="/ss">
+                  <Image
+                    src={item.path}
+                    preview={false}        
+                     style={{
+                      borderRadius: "3px",
+                      display: "block",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      width: "60%",
+                    }}
+                  />
+                </Link>
               }
               actions={[
-                <Button
+                // <Button
+                //   key="like"
+                //   type="button"
+                //   onClick={() => updateLike(item._id)}
+                // >
+                //   <>
+                //     {/* <HeartFilled twoToneColor="#eb2f96" />
+                //     {item.likes.length} */}
+
+                //     { userLikes[item._id] ? (
+                //       <HeartFilled style={{ color: "hotpink" }} />
+                //     ) : (
+                //       <HeartOutlined />
+                //     )}
+                //     <Space />
+                //     {/* <span style={{ paddingLeft: "10px" }}>
+                //       {userLikes[item._id] ? "Liked" : "Like"}
+                //     </span> */}
+                //     <span> {item.likes.length} </span>
+                //   </>
+                //   {/* <HeartOutlined /> */}
+                // </Button>,
+                 <Button
                   key="like"
-                  type="text"
+                  type="button"
                   onClick={() => updateLike(item._id)}
                 >
-                  <div>
-                    {/* <HeartFilled twoToneColor="#eb2f96" />
-                    {item.likes.length} */}
-
-                    {userLikes[item._id] ? (
-                      <HeartFilled style={{ color: "hotpink" }} />
-                    ) : (
-                      <HeartOutlined />
-                    )}
-                    <Space />
-                    {/* <span style={{ paddingLeft: "10px" }}>
-                      {userLikes[item._id] ? "Liked" : "Like"}
-                    </span> */}
-                    <span> {item.likes.length} </span>
-                  </div>
-                  {/* <HeartOutlined /> */}
+                  {userLikes[item._id] !== undefined ? (
+                   
+                    <>
+                      {userLikes[item._id] ? (
+                        <HeartFilled style={{ color: "hotpink" }} />
+                      ) : (
+                        <HeartOutlined />
+                      )}
+                      <Space />
+                      <span> {item.likes.length} </span>
+                    </>
+                  ) : (
+                    // Show a loading or placeholder
+                    "Loading..."
+                  )}
                 </Button>,
                 // <a>
                 //   <EditOutlined key="edit" />:
@@ -220,15 +246,12 @@ const handlelike = async () => {};
             >
               {/* <Card type="inner" title="inner"></Card> */}
               <Link to="sss">
-                <Meta
-                  
-                  title={`${item.caption}`}
-                />
+                <Meta title={`${item.caption}`} />
               </Link>
             </Card>
           </Col>
         ))}
-      </Row>
+      </Row>)}
     </div>
 
     // <>
