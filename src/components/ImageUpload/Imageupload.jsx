@@ -87,8 +87,8 @@ const handleFinish = async () => {
       <Form onFinish={handleFinish}>
         <div className="uploadContainer">
           <ImgCrop rotationSlider>
-            <Upload.Dragger
-              listType="picture-card"
+            <Upload
+              listType="picture-circle"
               fileList={fileList}
               beforeUpload={beforeUpload}
               //onPreview={handlePreview}
@@ -99,10 +99,10 @@ const handleFinish = async () => {
               <div className="uploadIcon">
                 <UploadOutlined />
               </div>
-            </Upload.Dragger>
+            </Upload>
           </ImgCrop>
         </div>
-        <Form.Item>
+        <Form.Item className=''>
           <Button shape="round" htmlType="submit">
             {submitting ? "Uploading" : "Upload"}
           </Button>

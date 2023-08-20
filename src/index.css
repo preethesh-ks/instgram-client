@@ -37,13 +37,16 @@
   padding-left: 50;
 }
 .pad {
-  padding-left: 220px;
+  display: flex;
+  justify-content: center;
+  
+  padding-bottom: 10px;
   /* margin-left: 200px; */
 }
 .pad-2 {
   display: flex;
   justify-content: center;
-  padding-left: 75px;
+ 
   padding-bottom: 25px;
   /* width: 100%; */
 }
@@ -61,9 +64,10 @@
 }
 .login-page {
   display: flex;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
-  min-height: 100vh;
+   min-height: 100vh; 
+  
   background: #d9edff;
 }
 
@@ -71,4 +75,28 @@
 
  
   
+}
+.arrange{
+  height: 500px;
+  width: 80%;
+    
+   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  
+}
+.arrange-2{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px;
+ 
+  
+  
+}
+
+.sticky-thc {
+  th {
+    position: sticky;
+    top: 0;
+  }
 }

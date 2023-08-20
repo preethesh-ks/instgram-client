@@ -6,25 +6,19 @@ import FirebaseUpload from '../components/ImageUpload/FirebaseUpload'
 import Post from '../components/Post/Post'
 
 import { Button } from 'antd'
+import Header1 from './Header'
 const Home = () => {
 
   const postsa = () =>{
     return <Post/>
   }
   return (
-    <div style={{ backgroundColor: "#FFF6DC" }}>
-      <a href="http://localhost:3000/post">
-        <button>Post</button>
-      </a>
+    <>
+      <Header1/>
       <LogoutButton />
       <Display />
-       <Button
-                  key="like"
-                  type="button"
-                  onClick={postsa}
-                >post </Button>
-      {/* <FirebaseUpload /> */}
-    </div>
+     
+    </>
   );
 }
 

@@ -11,7 +11,7 @@ const Register = () => {
      const [responseData, setResponseData] = useState(null);
     const [profilePic,setProfilePic] = useState();
     const [username,setUsername] = useState();
-console.log(full_name,email,password);
+//console.log(full_name,email,password);
      const validateConfirmPassword = ({ getFieldValue }) => ({
        validator(_, value) {
          if (!value || getFieldValue("password") === value) {
@@ -68,10 +68,10 @@ try{
     <div className="center ">
       <Form
         name="register"
-        labelAlign="left"
-        labelWrap
-        labelCol={{ span: 6 }}
-        wrapperCol={{ flex: 6 }}
+        // labelAlign="left"
+        // labelWrap
+        // labelCol={{ span: 6 }}
+        // wrapperCol={{ flex: 6 }}
         // className="box-shadow"
       >
         {/* Full Name Field */}
@@ -79,31 +79,32 @@ try{
           Register || Instgram
         </Title>
         <Form.Item
-          label="Full Name"
+          
           name="fullName"
           rules={[{ required: true, message: "Please enter your full name!" }]}
         >
           <Input
             value={full_name}
             onChange={(e) => setFull_Name(e.target.value)}
+            placeholder='Full Name'
           />
         </Form.Item>
 
         {/* Email Field */}
         <Form.Item
-          label="Email"
+         
           name="email"
           rules={[
             { required: true, message: "Please enter your email!" },
             { type: "email", message: "Please enter a valid email address!" },
           ]}
         >
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
         </Form.Item>
 
         {/* Password Field */}
         <Form.Item
-          label="Password"
+          
           name="password"
           rules={[
             { required: true, message: "Please enter your password!" },
@@ -113,12 +114,13 @@ try{
               <Input.Password
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder='Password'
           />
         </Form.Item>
 
         {/* Confirm Password Field */}
         <Form.Item
-          label="Confirm Password"
+         
           name="confirmPassword"
           rules={[
             { required: true, message: "Please confirm your password!" },
@@ -126,24 +128,10 @@ try{
           ]}
           className="text-align"
         >
-          <Input.Password />
-        </Form.Item>
-
-        <Form.Item
-          label="Profile Picture"
-          name="profilePic"
-          rules={[
-            { required: true, message: "Please enter your email!" },
-            { type: "text", message: "Please enter a valid email address!" },
-          ]}
-        >
-          <Input
-            value={profilePic}
-            onChange={(e) => setProfilePic(e.target.value)}
-          />
+          <Input.Password placeholder='Confirm Password'/>
         </Form.Item>
         <Form.Item
-          label="username"
+          
           name="username"
           rules={[
             { required: true, message: "Please enter your email!" },
@@ -153,6 +141,7 @@ try{
           <Input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder='UserName'
           />
         </Form.Item>
 

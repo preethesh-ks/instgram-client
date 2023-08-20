@@ -1,14 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Card, Avatar, Row, Col, Button, Space, message, Image ,Spin} from "antd";
+import {
+  Card,
+  Avatar,
+  Row,
+  Col,
+  Button,
+  Space,
+  message,
+  Image,
+  Spin,
+} from "antd";
 import { Link } from "react-router-dom";
 import {
   HeartFilled,
   HeartOutlined,
   CommentOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
+import Comment from "../../pages/Comment";
+import { useSelector,useDispatch } from "react-redux";
+import {
+  setSelectedCardIndex,
+  setCommentBoxVisibility,
+  toggleCommentBox,
+} from "../../store/cardSlice";
 const { Meta } = Card;
+
 
 // const data = [
 //   {
@@ -57,15 +76,39 @@ const { Meta } = Card;
 //   // Add more data entries here as needed
 // ];
 
-const geturl = "http://localhost:8080/api/home";
+const geturl = `${process.env.REACT_APP_API_ENDPOINT}api/home`;
 
 const Display = () => {
+  // const [comment,setComment] = useState(false)
   const [data, setData] = useState([]);
   const [userLikes, setUserLikes] = useState({});
   const [decodedUserId, setDecoded] = useState();
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  // const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   console.log(decodedUserId);
-//console.log(userLikes);
+  //console.log(userLikes);
+ const dispatch = useDispatch();
+
+  const cardRead = useSelector((state) => state.card.selectedCardIndex);
+  console.log(cardRead)
+  const commentBoxVisible = useSelector(
+    (state) => state.card.commentBoxVisible
+  );
+   console.log(cardRead,commentBoxVisible)
+
+  const handleCommentButtonClick =  (index) => {
+   dispatch(setSelectedCardIndex(index));
+    dispatch(toggleCommentBox(index));
+  };
+
+  const handleCloseCommentBox = (index) => {
+    dispatch(setCommentBoxVisibility({ cardIndex: index, isVisible: false }));
+  };
+
+  // const Toggle = () =>{
+  //   setComment(prevState => ! prevState);
+  // }
   useEffect(() => {
     const getAccessTokenFromLocalStorage = () => {
       const accessToken = localStorage.getItem("access_token");
@@ -81,8 +124,8 @@ const Display = () => {
           // Handle decoding errors
           console.error("Error decoding JWT:", error);
         }
-      } else{
-        console.log("no acces token")
+      } else {
+        console.log("no acces token");
       }
     };
 
@@ -95,18 +138,18 @@ const Display = () => {
       console.log(response.data);
       const jsonData = response.data;
 
-      const likedStatus ={} 
+      const likedStatus = {};
       jsonData.forEach((post) => {
         likedStatus[post._id] = post.likes.some(
           (like) => like.userId === decodedUserId
-        ); 
+        );
       });
       console.log(jsonData);
-      
+
       console.log(userLikes);
       setData(jsonData);
       setUserLikes(likedStatus);
-      
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
       message.error("Something Went Wrong Try Again!");
@@ -116,23 +159,22 @@ const Display = () => {
     console.log(postId);
     const userId = decodedUserId;
     console.log(userId);
-    try{
-      const likeStatus = await axios.post(`http://localhost:8080/api/like`,{userId:userId,postId:postId});
+    try {
+      const likeStatus = await axios.post(`http://localhost:8080/api/like`, {
+        userId: userId,
+        postId: postId,
+      });
       console.log(likeStatus);
       fetchAPi();
-      
-    }
-    catch(error){
+    } catch (error) {
       console.log(error);
     }
-
-
-
-
-  }
+  };
   const userD = async () => {};
-
-  console.log(data);
+  // const handleCommentButtonClick = (index) => {
+  //   setSelectedCardIndex(index);
+  // };
+  // console.log(data);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,127 +184,118 @@ const Display = () => {
     fetchData();
   }, [decodedUserId]);
 
-
-
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
       {loading ? ( // Display Spin component while loading is true
         <Spin size="large" />
       ) : (
-      <Row gutter={16} justify="center">
-        {data.map((item, index) => (
-          <Col span={15} key={index} className="center-post">
-            <Card
-              title={
-                <div style={{}}>
-                  <Space>
-                    <Avatar src={item.path} className="profile-pic-meta" />
+        <Spin size="large" spinning={loading}>
+          <Row gutter={16} justify="center">
+            {data.map((item, index) => (
+              <Col span={15} key={index} className="center-post">
+                <Card
+                  title={
+                    <div style={{}}>
+                      <Space>
+                        <Avatar src={item.path} className="profile-pic-meta" />
 
-                    {item.username}
-                  </Space>
-                </div>
-              }
-              size="small"
-              style={{ width: 400, marginBottom: 20 }}
-              hoverable
-              loading={loading}
-              extra="sss"
-              cover={
-                <Link to="/ss">
-                  <Image
-                    src={item.path}
-                    preview={false}        
-                     style={{
-                      borderRadius: "3px",
-                      display: "block",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                      width: "60%",
-                    }}
-                  />
-                </Link>
-              }
-              actions={[
-                // <Button
-                //   key="like"
-                //   type="button"
-                //   onClick={() => updateLike(item._id)}
-                // >
-                //   <>
-                //     {/* <HeartFilled twoToneColor="#eb2f96" />
-                //     {item.likes.length} */}
-
-                //     { userLikes[item._id] ? (
-                //       <HeartFilled style={{ color: "hotpink" }} />
-                //     ) : (
-                //       <HeartOutlined />
-                //     )}
-                //     <Space />
-                //     {/* <span style={{ paddingLeft: "10px" }}>
-                //       {userLikes[item._id] ? "Liked" : "Like"}
-                //     </span> */}
-                //     <span> {item.likes.length} </span>
-                //   </>
-                //   {/* <HeartOutlined /> */}
-                // </Button>,
-                 <Button
-                  key="like"
-                  type="button"
-                  onClick={() => updateLike(item._id)}
-                >
-                  {userLikes[item._id] !== undefined ? (
-                   
-                    <>
-                      {userLikes[item._id] ? (
-                        <HeartFilled style={{ color: "hotpink" }} />
+                        {item.username}
+                      </Space>
+                    </div>
+                  }
+                  size="small"
+                  style={{ width: 400, marginBottom: 20 }}
+                  hoverable
+                  loading={loading}
+                  extra="sss"
+                  cover={
+                    <Link to={`/:${item._id}`}>
+                      <Spin spinning={isLoading}>
+                        <Image
+                          src={item.path}
+                          preview={false}
+                          style={{
+                            borderRadius: "3px",
+                            display: "block",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            width: "60%",
+                          }}
+                        />
+                      </Spin>
+                    </Link>
+                  }
+                  actions={[
+                    <Button
+                      key="like"
+                      type="text"
+                      onClick={() => updateLike(item._id)}
+                    >
+                      {userLikes[item._id] !== undefined ? (
+                        <>
+                          {userLikes[item._id] ? (
+                            <HeartFilled style={{ color: "hotpink" }} />
+                          ) : (
+                            <HeartOutlined />
+                          )}
+                          <Space />
+                          <span> {item.likes.length} </span>
+                        </>
                       ) : (
-                        <HeartOutlined />
+                        "Loading..."
                       )}
-                      <Space />
-                      <span> {item.likes.length} </span>
-                    </>
-                  ) : (
-                    // Show a loading or placeholder
-                    "Loading..."
-                  )}
-                </Button>,
-                // <a>
-                //   <EditOutlined key="edit" />:
-                //   {item.comments.map((comment) => (
-                //     <li key={comment.id}>{comment[1]}</li>
-                //   ))}
-                // </a>,
-                <CommentOutlined
-                  style={{ fontSize: "20px", paddingTop: "5px" }}
-                />,
-                <>
-                  <Link to="aa">
-                    <Button key="delete" type="text">
-                      Delete
-                    </Button>
-                  </Link>
-                </>,
-              ]}
-            >
-              {/* <Card type="inner" title="inner"></Card> */}
-              <Link to="sss">
-                <Meta title={`${item.caption}`} />
-              </Link>
-            </Card>
-          </Col>
-        ))}
-      </Row>)}
-    </div>
+                    </Button>,
 
-    // <>
-    //   {/* <Row>
-    //     {data.map((item, index) => (
-    //       <Col span={24} className="center">
-    //         <Button>j</Button>
-    //       </Col>
-    //     ))}
-    //   </Row> */}
-    // </>
+                    <>
+                      <Button
+                        type="text"
+                        onClick={() => handleCommentButtonClick(index)}
+                      >
+                        <CommentOutlined
+                        // style={{ fontSize: "20px", paddingTop: "5px" }}
+                        />
+                        {"" + item.comments.length}
+                      </Button>
+                    </>,
+
+                    <>
+                      <Link to="aa">
+                        <Button key="delete" type="text">
+                          Delete
+                        </Button>
+                      </Link>
+                    </>,
+                  ]}
+                >
+                  {/* <Card type="inner" title="inner"></Card> */}
+                  <Link to="sss">
+                    <Meta title={`${item.caption}`} />
+                  </Link>
+                  {/* {item.comments.map((comment, index) => (
+                    <li key={index}>
+                      <span>User: {comment.username}</span>
+                      <span>Comment: {comment.comment}</span>
+                    </li>
+                  ))} */}
+                  {commentBoxVisible[index] && (
+                    <>
+                      <Comment comments={item.comments} />
+                      <Button
+                        danger
+                        onClick={() => handleCloseCommentBox(index)}
+                      >
+                        <CloseOutlined />
+                      </Button>
+                      {/* Show Comment component when the button is clicked */}
+                    </>
+                  )}
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Spin>
+      )}
+    </div>
   );
 };
 
