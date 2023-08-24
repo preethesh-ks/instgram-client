@@ -5,7 +5,7 @@ const LogoutButton = () => {
   const handleLogout = () => {
     // Clear the local storage
     localStorage.clear();
-  window.location.href = '/login'; // Replace '/login' with your login page URL
+  window.location.href = '/login'; 
   };
 
   return (
@@ -24,5 +24,5 @@ export default LogoutButton;
 export const handleLogout = () => {
   // Clear the local storage
   localStorage.clear();
-  window.location.href = "/login"; // Replace '/login' with your login page URL
+  window.location.href = "/login"; 
 };

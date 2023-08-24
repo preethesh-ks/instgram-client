@@ -37,7 +37,7 @@ const onRemove = async (file) => {
 };
 const handleFinish = async () => {
  try {
-   setSubmitting(true); // Assuming you have a state variable 'setSubmitting'
+   setSubmitting(true); 
 
    const storage = getStorage(); // Get the storage instance
 
@@ -73,7 +73,7 @@ const handleFinish = async () => {
    );
 
    setFileList([]); // Clear fileList state after successful upload
-   message.success(`Images added successfully.`, 2); // Assuming you are using 'message' for displaying success message
+   message.success(`Images added successfully.`, 2); 
  } catch (err) {
    console.log("Error:", err);
    message.error(`Error adding images.`, 2);

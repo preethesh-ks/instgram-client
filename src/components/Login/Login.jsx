@@ -33,7 +33,8 @@ const dispatch = useDispatch();
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
  
-   console.log(responseData)
+  //  console.log(responseData)
+
 
   //   console.log(email);
   // console.log(password);
@@ -126,7 +127,7 @@ try{
                   ]}
                 >
                   <Input
-                    autoComplete="true"
+                    
                     size="large"
                     prefix={<UserOutlined />}
                     value={email}
@@ -149,7 +150,7 @@ try{
                     onChange={(e) => setPassword(e.target.value)}
                     allowClear
                     placeholder="Enter your password"
-                    block
+                   
                     style={{ width: "100%" }}
                   />
                 </Form.Item>
